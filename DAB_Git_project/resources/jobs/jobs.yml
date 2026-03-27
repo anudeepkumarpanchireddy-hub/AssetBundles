@@ -1,0 +1,36 @@
+resources:
+  jobs:
+    DAB_Job:
+      name: "DAB_Job"
+      tasks:
+        - task_key: rider_details
+          notebook_task:
+            notebook_path: /Workspace/src/notebooks/Ingestion-1.ipynb
+            source: WORKSPACE
+          environment_key: rider_details_environment
+        - task_key: vehicle_details
+          notebook_task:
+            notebook_path: /Workspace/src/notebooks/Ingestion-2.ipynb
+            source: WORKSPACE
+        - task_key: rider_vehicle_details
+          depends_on:
+            - task_key: vehicle_details
+            - task_key: rider_details
+          notebook_task:
+            notebook_path: /Workspace/src/notebooks/Transform.ipynb
+            source: WORKSPACE
+        - task_key: pipeline_demopipeline
+          depends_on:
+            - task_key: rider_vehicle_details
+          pipeline_task:
+            pipeline_id: pipeline_demopipeline
+      queue:
+        enabled: true
+      environments:
+        - environment_key: rider_details_environment
+          spec:
+            environment_version: "5"
+        - environment_key: rider_vehicle_details_environment
+          spec:
+            environment_version: "5"
+      performance_target: PERFORMANCE_OPTIMIZED
