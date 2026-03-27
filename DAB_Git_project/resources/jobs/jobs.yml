@@ -5,25 +5,25 @@ resources:
       tasks:
         - task_key: rider_details
           notebook_task:
-            notebook_path: /Workspace/src/notebooks/Ingestion-1.ipynb
-            source: WORKSPACE
+            notebook_path: ../../src/notebooks/Ingestion-1.ipynb
+            # source: WORKSPACE
           environment_key: rider_details_environment
         - task_key: vehicle_details
           notebook_task:
-            notebook_path: /Workspace/src/notebooks/Ingestion-2.ipynb
-            source: WORKSPACE
+            notebook_path: ../../src/notebooks/Ingestion-2.ipynb
+            # source: WORKSPACE
         - task_key: rider_vehicle_details
           depends_on:
             - task_key: vehicle_details
             - task_key: rider_details
           notebook_task:
-            notebook_path: /Workspace/src/notebooks/Transform.ipynb
-            source: WORKSPACE
+            notebook_path: ../../src/notebooks/Transform.ipynb
+            # source: WORKSPACE
         - task_key: pipeline_demopipeline
           depends_on:
             - task_key: rider_vehicle_details
           pipeline_task:
-            pipeline_id: pipeline_demopipeline
+            pipeline_id: ${resources.pipelines.pipeline_demopipeline.id}
       queue:
         enabled: true
       environments:
